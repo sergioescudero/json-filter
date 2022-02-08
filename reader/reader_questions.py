@@ -1,8 +1,9 @@
 from typing import List, Dict
 
+
 class Reader:
 
-    def _order_by_id(self, items: List, reverse=False: bool)-> List:
+    def _order_by_id(self, items: List, reverse: bool = False) -> List:
         return sorted(items, key=lambda k: (k['id']), reverse=reverse)
 
 
@@ -14,18 +15,17 @@ class QuestionReader(Reader):
     def get_unique_questions_with_highest_rating_and_older_ordered_by_id(self, asc=True):
         final_questions = list()
         for question in self.questions:
-            if self.is_question_already_checked(question, final_questions)):
+            if self.is_question_already_checked(question, final_questions):
                 question_with_highest_rating_and_older = \
                     self.get_question_highest_rating_and_older(question)
                 if question_with_highest_rating_and_older:
                     final_questions.append(question_with_highest_rating_and_older)
-        if asc:
-            return self._order_questions_by_id(final_questions)
-        return self._order_questions_by_id(final_questions, reverse=True)
 
+        return self.__order_questions_by_id(final_questions, asc)
 
     def is_question_already_checked(self, question: Dict, final_questions: List) -> bool:
-        return len(list(filter(lambda x: x['content'] == question['content'], final_questions))) == 0
+        return len(list(
+            filter(lambda x: x['content'] == question['content'], final_questions))) == 0
 
     def get_question_highest_rating_and_older(self, question: Dict) -> Dict:
         similar_questions = self.get_similar_questions(question)
@@ -48,5 +48,7 @@ class QuestionReader(Reader):
         answer_with_higest_rating = max(answers, key=lambda x: x['rating'])
         return answer_with_higest_rating['rating']
 
-
-
+    def __order_questions_by_id(self, questions: List, asc=True) -> List:
+        if asc:
+            return sorted(questions, key=lambda k: (k['id']))
+        return sorted(questions, key=lambda k: (-k['id']))
