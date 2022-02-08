@@ -21,7 +21,7 @@ class QuestionReader(Reader):
                 if question_with_highest_rating_and_older:
                     final_questions.append(question_with_highest_rating_and_older)
 
-        return self.__order_questions_by_id_asc(final_questions)
+        return self.__order_questions_by_id(final_questions, asc)
 
     def is_question_already_checked(self, question: Dict, final_questions: List) -> bool:
         return len(list(
@@ -48,5 +48,7 @@ class QuestionReader(Reader):
         answer_with_higest_rating = max(answers, key=lambda x: x['rating'])
         return answer_with_higest_rating['rating']
 
-    def __order_questions_by_id_asc(self, questions: List) -> List:
-        return sorted(questions, key=lambda k: (k['id']))
+    def __order_questions_by_id(self, questions: List, asc=True) -> List:
+        if asc:
+            return sorted(questions, key=lambda k: (k['id']))
+        return sorted(questions, key=lambda k: (-k['id']))
